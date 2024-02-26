@@ -1,0 +1,279 @@
+ CREATE DATABASE db_Wojsko;
+  USE db_Wojsko;
+
+  CREATE TABLE tbl_nazwa_pocisku
+  (
+    ID_nazwy_pocisku INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    nazwa_pocisku VARCHAR(30),
+    PRIMARY KEY(ID_nazwy_pocisku)
+  );
+  CREATE TABLE tbl_rodzaj_pocisku
+  (
+    ID_rodzaj_pocisku INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    rodzaj_pocisku VARCHAR(30),
+    PRIMARY KEY(ID_rodzaj_pocisku)
+
+  );
+  CREATE TABLE tbl_kraj_produkcji
+  (
+    ID_kraju_produkcji INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    Kraj_produkcji VARCHAR(30),
+    PRIMARY KEY(ID_kraju_produkcji)
+
+  );
+  CREATE TABLE tbl_pocisk
+  (
+    ID_pocisku INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    ID_nazwy_pocisku INT UNSIGNED NOT NULL,
+    Ilosc_zuzytych_pociskow INT(30),
+    ID_rodzaj_pocisku INT UNSIGNED NOT NULL,
+    ID_kraju_produkcji INT UNSIGNED NOT NULL,
+    PRIMARY KEY(ID_pocisku),
+    FOREIGN KEY(ID_nazwy_pocisku)
+        REFERENCES tbl_nazwa_pocisku(ID_nazwy_pocisku)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY(ID_rodzaj_pocisku)
+        REFERENCES tbl_rodzaj_pocisku(ID_rodzaj_pocisku)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY(ID_kraju_produkcji)
+        REFERENCES tbl_kraj_produkcji(ID_kraju_produkcji)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+  );
+  CREATE TABLE tbl_panstwo
+  (
+    ID_panstwa INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    Panstwo VARCHAR(30),
+    PRIMARY KEY(ID_panstwa)
+  );
+  CREATE TABLE tbl_wojewodztwo
+  (
+    ID_wojewodztwa INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    Wojewodztwo VARCHAR(30),
+    PRIMARY KEY(ID_wojewodztwa)
+  );
+  CREATE TABLE tbl_miasto
+  (
+    ID_miasta INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    Miasto VARCHAR(50),
+    PRIMARY KEY(ID_miasta)
+  );
+  CREATE TABLE tbl_ulica
+  (
+    ID_ulicy INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    Ulica VARCHAR(50),
+    PRIMARY KEY(ID_ulicy)
+  );
+  CREATE TABLE tbl_lokalizacja
+  (
+    ID_lokalizacji INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    ID_panstwa INT UNSIGNED NOT NULL,
+    ID_wojewodztwa INT UNSIGNED NOT NULL,
+    ID_miasta INT UNSIGNED NOT NULL,
+    ID_ulicy INT UNSIGNED NOT NULL,
+    kod_pocztowy CHAR(5),
+    PRIMARY KEY(ID_lokalizacji),
+    FOREIGN KEY(ID_panstwa)
+        REFERENCES tbl_panstwo(ID_panstwa)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY(ID_wojewodztwa)
+        REFERENCES tbl_wojewodztwo(ID_wojewodztwa)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY(ID_miasta)
+        REFERENCES tbl_miasto(ID_miasta)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY(ID_ulicy)
+        REFERENCES tbl_ulica(ID_ulicy)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+  );
+  CREATE TABLE tbl_rezultat
+  (
+    ID_rezultatu INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    rezultat VARCHAR(10),
+    PRIMARY KEY(ID_rezultatu)
+  );
+  CREATE TABLE tbl_specjalnosc
+  (
+    ID_specjalnosci INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    specjalnosc VARCHAR(30),
+    PRIMARY KEY(ID_specjalnosci)
+  );
+  CREATE TABLE tbl_stopien_dowodcy
+  (
+    ID_stopnia_dowodcy INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    stopien_dowodcy VARCHAR(20),
+    PRIMARY KEY(ID_stopnia_dowodcy)
+
+  );
+  CREATE TABLE tbl_wyposazenie_nazwa
+  (
+    ID_wyposazenie_nazwa INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    nazwa_wyposazenia VARCHAR(50)
+  );
+  CREATE TABLE tbl_stawka_podatku
+  (
+    ID_stawki_podatku INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    nazwa VARCHAR(10),
+    stawka_podatku FLOAT(3,2),
+    PRIMARY KEY(ID_stawki_podatku)
+
+  );
+  CREATE TABLE tbl_stopien
+  (
+    ID_stopnia INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    stopien VARCHAR(30),
+    PRIMARY KEY(ID_stopnia)
+  );
+  CREATE TABLE tbl_funkcja
+  (
+    ID_funkcji INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    funkcja VARCHAR(30),
+    PRIMARY KEY(ID_funkcji)
+
+  );
+  CREATE TABLE tbl_StrukturaOsobowa
+  (
+    ID_StrukturyOsobowej INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    Imie VARCHAR(30),
+    Nazwisko VARCHAR(30),
+    ID_stopnia INT UNSIGNED NOT NULL,
+    ID_funkcji INT UNSIGNED NOT NULL,
+    Dlugosc_sluzby INT(10),
+    Wynagrodzenie_miesieczne FLOAT(6,2),
+    PRIMARY KEY(ID_StrukturyOsobowej),
+    FOREIGN KEY(ID_stopnia)
+        REFERENCES tbl_stopien(ID_stopnia)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY(ID_funkcji)
+        REFERENCES tbl_funkcja(ID_funkcji)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+  );
+  CREATE TABLE tbl_DaneWrazliwe
+  (
+    ID_StrukturyOsobowej INT UNSIGNED NOT NULL,
+    PESEL CHAR(11),
+    telefon CHAR(9),
+    numer_konta CHAR(26),
+    PRIMARY KEY(ID_StrukturyOsobowej),
+    FOREIGN KEY(ID_StrukturyOsobowej)
+        REFERENCES tbl_StrukturaOsobowa(ID_StrukturyOsobowej)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+  );
+  CREATE TABLE tbl_Wyposazenie
+  (
+    ID_Wyposazenia INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    ID_wyposazenie_nazwa INT UNSIGNED NOT NULL,
+    CenaNetto FLOAT(6,2),
+    ID_stawki_podatku INT UNSIGNED NOT NULL,
+    Ilosc INT(30),
+    DataPrzegladu DATE,
+    PRIMARY KEY(ID_Wyposazenia),
+    FOREIGN KEY(ID_wyposazenie_nazwa)
+        REFERENCES tbl_wyposazenie_nazwa(ID_wyposazenie_nazwa)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY(ID_stawki_podatku)
+        REFERENCES tbl_stawka_podatku(ID_stawki_podatku)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+  );
+  CREATE TABLE tbl_StrukturaOddzialu
+  (
+    ID_StrukturyOddzialu INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    Nazwaoddzialu VARCHAR(30),
+    Iloscosob INT(20),
+    Iloscszeregowych INT(20),
+    Iloscpodoficerow INT(20),
+    Iloscoficerow INT(20),
+    ID_stopnia_dowodcy INT UNSIGNED NOT NULL,
+    ID_StrukturyOsobowej INT UNSIGNED NOT NULL,
+    PRIMARY KEY(ID_StrukturyOddzialu),
+    FOREIGN KEY(ID_StrukturyOsobowej)
+        REFERENCES tbl_StrukturaOsobowa(ID_StrukturyOsobowej)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY(ID_stopnia_dowodcy)
+        REFERENCES tbl_stopien_dowodcy(ID_stopnia_dowodcy)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+  );
+  CREATE TABLE tbl_Operacja
+  (
+    ID_Operacji INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    NazwaOperacji VARCHAR(30),
+    Straty Varchar(100),
+    Datarozpoczecia DATE,
+    Datazakonczenia DATE,
+    ID_rezultatu INT UNSIGNED NOT NULL,
+    PRIMARY KEY(ID_Operacji),
+    FOREIGN KEY(ID_rezultatu)
+        REFERENCES tbl_rezultat(ID_rezultatu)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+  );
+  CREATE TABLE tbl_Operacja_Pociski
+  (
+    ID_Operacja_Pociski INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    ID_Operacji INT UNSIGNED NOT NULL,
+    ID_Pocisku INT UNSIGNED NOT NULL,
+    PRIMARY KEY(ID_Operacja_Pociski),
+    FOREIGN KEY(ID_Operacji)
+        REFERENCES tbl_Operacja(ID_Operacji)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY(ID_Pocisku)
+        REFERENCES tbl_pocisk(ID_pocisku)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+  );
+  CREATE TABLE tbl_OperacjaOddzial
+  (
+    ID_OperacjaOddzial INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+    ID_Operacji INT UNSIGNED NOT NULL,
+    ID_StrukturyOddzialu INT UNSIGNED NOT NULL,
+    PRIMARY KEY(ID_OperacjaOddzial),
+    FOREIGN KEY(ID_Operacji)
+        REFERENCES tbl_Operacja(ID_Operacji)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY(ID_StrukturyOddzialu)
+        REFERENCES tbl_StrukturaOddzialu(ID_StrukturyOddzialu)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+  );
+  CREATE TABLE tbl_JednWojskowa
+  (
+  ID_JednWojskowej INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
+  Numer INT(20),
+  ID_lokalizacji INT UNSIGNED NOT NULL,
+  Iloscosob INT(20),
+  ID_specjalnosci INT UNSIGNED NOT NULL,
+  ID_StrukturyOddzialu INT UNSIGNED NOT NULL,
+  ID_Wyposazenia INT UNSIGNED NOT NULL,
+  PRIMARY KEY(ID_JednWojskowej),
+  FOREIGN KEY(ID_StrukturyOddzialu)
+    REFERENCES tbl_StrukturaOddzialu(ID_StrukturyOddzialu)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  FOREIGN KEY(ID_Wyposazenia)
+    REFERENCES tbl_Wyposazenie(ID_Wyposazenia)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  FOREIGN KEY(ID_lokalizacji)
+    REFERENCES tbl_lokalizacja(ID_lokalizacji)
+    ON UPDATE CASCADE 
+    ON DELETE CASCADE,
+  FOREIGN KEY(ID_specjalnosci)
+    REFERENCES tbl_specjalnosc(ID_specjalnosci)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+  );
