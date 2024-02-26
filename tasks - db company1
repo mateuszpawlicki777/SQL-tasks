@@ -1,0 +1,63 @@
+select last_name lower(last_name), upper(last_name), initcap(last_name)
+,initcap ('kowalski nowak')
+from employees;
+
+select last_name
+,substr(last_name, 2,3) as s1
+,instr(last_name,'') as i1 
+,instr(last_name,'i',2,1) as i2
+,substr(last_name,1,instr(last_name,'')-1) as is1 
+from employees;
+
+select last_name, length(last_name) as l1
+, replace(last_name,'i','X') as r1
+, replace(last_name,'ig','XY') as r2
+, translate(last_name,'ig','XY') as t1
+from employees
+where lenght(last_name) >= 5;
+
+select *
+from dual;
+
+select '   Nowak Kowalski    ' as nazwisko
+, length('   Nowak Kowalski    ') as l1
+, length(replace('   Nowak Kowalski    ',' ','')) as l2
+, length(ltrim('   Nowak Kowalski    ')) as lt1
+, length(rtrim('   Nowak Kowalski    ')) as rt1
+, length(trim('   Nowak Kowalski    ')) as t1
+from dual
+;
+
+select last_name, lpad(last_name, 20, '*') as l1, rpad(last_name, 20, '*') as r1
+from employees;
+
+select 124*1.145/3.45
+, round(124*1.145/3.45, 3) as r1
+, floor(124*1.145/3.45) as f1
+, ceil(124*1.145/3.45) as c1
+from dual;
+
+select last_name, hire_date
+, hire_date + 7 as h1
+from employees;
+
+select last_name, hire_date
+, add_months(hire_date, 1)  as h3
+from employees;
+
+select to_date('2023/11/25', 'YYYY/MM/DD') - to_date('2021/10/01', 'YYYY/MM/DD') as ile_dni
+,floor(sysdate -to_date('2021/10/01', 'YYYY/MM/DD')) AS ile_dni2
+,floor(months_between(sysdate, to_date('2021/10/01', 'YYYY/MM/DD'))) as ile_miesiecy
+,floor(months_between(sysdate, to_date('2021/10/01', 'YYYY/MM/DD'))/12) as ile_lat
+from dual;
+
+select last_name, hire_date, to_char(hire_date, 'yyyy') as rok
+, to_char(hire_date, 'mm') as miesiac
+, to_char(hire_date, 'mon') as miesiac2
+, to_char(hire_date, 'yyyy-iw') as num_tyg
+from employees;
+
+select last_name, bonus, commission_pct
+, nvl(bonus, 'brak premii') as bonus2
+, nvl(to_char(commission_pct), 'brak prowizji') as commision2
+from employees;
