@@ -1,0 +1,87 @@
+USE db_kosmodron;
+BULK INSERT dbo.tbl_klient FROM 'E:\kosmodron\tbl_klient.csv'
+WITH (
+    FIELDTERMINATOR = ',' , 
+    FIRSTROW = 2
+)
+BULK INSERT dbo.tbl_astronauta FROM 'E:\kosmodron\tbl_astronauta.csv'
+WITH (
+    FIELDTERMINATOR = ',' , 
+    FIRSTROW = 2
+)
+BULK INSERT dbo.tbl_rakieta FROM 'E:\kosmodron\tbl_rakieta.csv' 
+WITH (
+    FIELDTERMINATOR = ';' , 
+    FIRSTROW = 2
+)
+BULK INSERT dbo.tbl_misja FROM 'E:\kosmodron\tbl_misja.csv' 
+WITH (
+    FIELDTERMINATOR = ',' , 
+    FIRSTROW = 2
+)
+BULK INSERT dbo.tbl_zaloga FROM 'E:\kosmodron\tbl_zaloga.csv' 
+WITH (
+    FIELDTERMINATOR = ',' , 
+    FIRSTROW = 2
+)
+BULK INSERT dbo.tbl_pasazerowie FROM 'E:\kosmodron\tbl_pasazerowie.csv' 
+WITH (
+    FIELDTERMINATOR = ',' , 
+    FIRSTROW = 2
+)
+
+/* Misje kosmiczne, które trwały dłużej niż przewidywano */
+USE db_kosmodron;
+SELECT m.ID_misji, m.cel_misji, m.[przewidywany_czas_trwania(dni)], m.[czas_trwania(dni)]
+FROM tbl_misja AS m
+WHERE m.[przewidywany_czas_trwania(dni)] < m.[czas_trwania(dni)];
+
+/*Ile kosztują loty w kosmos? */
+
+USE db_kosmodron;
+SELECT (SUM(m.potrzebny_budzet) + SUM(a.pensja)) AS koszt_wyprawy, m.nazwa_misji
+FROM tbl_misja AS m, tbl_astronauta AS a, tbl_rakieta AS r, tbl_zaloga AS z
+WHERE a.ID_astronauty = z.ID_astronauty
+AND z.ID_rakiety = r.ID_rakiety
+AND m.ID_rakiety = r.ID_rakiety
+GROUP BY m.ID_misji, m.nazwa_misji
+
+
+/* Pozwolenie na lot klientom którzy ukończyli kurs BHP */
+USE db_kosmodron;
+ALTER TABLE tbl_klient
+ADD pozwolenie_na_lot BIT;
+
+UPDATE tbl_klient
+SET pozwolenie_na_lot = 1 
+WHERE kurs_BHP = 1;
+
+UPDATE tbl_klient
+SET pozwolenie_na_lot = 0
+WHERE kurs_BHP = 0;
+
+USE db_kosmodron;
+SELECT k.imie, k.nazwisko
+FROM tbl_klient AS k
+WHERE pozwolenie_na_lot = 0;
+
+/* Klienci którzy najczęściel lecieli w kosmos */
+
+USE db_kosmodron;
+SELECT k.imie, k.nazwisko, COUNT(p.ID_klienta) AS Ilosc_wypraw_w_kosmos
+FROM tbl_klient AS k, tbl_pasazerowie AS p
+WHERE k.ID_klienta = p.ID_klienta
+GROUP BY k.ID_klienta, k.imie, k.nazwisko
+ORDER BY Ilosc_wypraw_w_kosmos DESC;
+
+
+
+
+
+
+
+
+
+
+
+
