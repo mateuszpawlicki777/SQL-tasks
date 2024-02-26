@@ -1,0 +1,108 @@
+CREATE TABLE `dania` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `typ` int(10) UNSIGNED DEFAULT NULL,
+  `nazwa` text,
+  `cena` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `dania` (`id`, `typ`, `nazwa`, `cena`) VALUES
+(1, 1, 'Gazpacho', 20),
+(2, 1, 'Krem z warzyw', 25),
+(3, 1, 'Gulaszowa ostra', 30),
+(4, 2, 'Kaczka i owoc', 30),
+(5, 2, 'Kurczak pieczony', 40),
+(6, 2, 'wieprzowy przysmak', 35),
+(7, 2, 'Mintaj w panierce', 30),
+(8, 2, 'Alle kotlet', 30),
+(9, 3, 'Owoce morza', 20),
+(10, 3, 'Grzybki, warzywka, sos', 15),
+(11, 3, 'Orzechy i chipsy', 10),
+(12, 3, 'Tatar i jajo', 15),
+(13, 3, 'Bukiet warzyw', 10),
+(14, 4, 'Sok porzeczkowy', 3),
+(15, 4, 'Cola', 3),
+(16, 4, 'Woda', 2);
+------------------------------------------------------------
+CREATE TABLE `ogloszenie` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `uzytkownik_id` int(10) UNSIGNED NOT NULL,
+  `kategoria` int(10) UNSIGNED DEFAULT NULL,
+  `podkategoria` int(10) UNSIGNED DEFAULT NULL,
+  `tytul` text,
+  `tresc` text
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `ogloszenie` (`id`, `uzytkownik_id`, `kategoria`, `podkategoria`, `tytul`, `tresc`) VALUES
+(1, 1, 1, 12, 'Daniel Craig. Biografia', 'Biografia Daniela Craiga, niedrogo sprzedam'),
+(2, 1, 1, 13, 'Selekcja', 'Sprzedam: \"Selekcja\" J. Kellermana, niezniszczona'),
+(3, 2, 1, 13, 'Buick', 'Sprzedam horror Stephena Kinga w dobrym stanie'),
+(4, 2, 1, 14, 'Tytus, Romek i Atomek', 'Ks. IV do sprzedania, stan dobry'),
+(5, 2, 2, 0, 'Imagine Dragons', 'Sprzedam dwa CD Imagine Dragons');
+------------------------------------------------------------
+CREATE TABLE `wyniki` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `dyscyplina_id` int(10) UNSIGNED NOT NULL,
+  `sportowiec_id` int(10) UNSIGNED NOT NULL,
+  `wynik` decimal(5,2) DEFAULT NULL,
+  `dataUstanowienia` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `wyniki` (`id`, `dyscyplina_id`, `sportowiec_id`, `wynik`, `dataUstanowienia`) VALUES
+(1, 1, 1, '12.40', '2015-10-14'),
+(2, 1, 1, '12.00', '2015-10-06'),
+(3, 1, 2, '11.80', '2015-10-14'),
+(4, 1, 2, '11.90', '2015-10-06'),
+(5, 1, 3, '11.50', '2015-10-14'),
+(6, 1, 3, '11.56', '2015-10-06'),
+(7, 1, 4, '11.70', '2015-10-14'),
+(8, 1, 4, '11.67', '2015-10-06'),
+(9, 1, 5, '11.30', '2015-10-14'),
+(10, 1, 5, '11.52', '2015-10-06'),
+(11, 1, 6, '12.10', '2015-10-14'),
+(12, 1, 6, '12.00', '2015-10-06'),
+(13, 3, 1, '63.00', '2015-11-11'),
+(14, 3, 1, '63.60', '2015-10-13'),
+(15, 3, 2, '64.00', '2015-11-11'),
+(16, 3, 2, '63.60', '2015-10-13'),
+(17, 3, 3, '60.00', '2015-11-11'),
+(18, 3, 3, '61.60', '2015-10-13'),
+(19, 3, 4, '63.50', '2015-11-11'),
+(20, 3, 4, '63.60', '2015-10-13'),
+(21, 3, 5, '70.00', '2015-10-07'),
+(22, 3, 6, '68.00', '2015-10-07');
+--------------------------------------------------------------
+CREATE TABLE `zwierzeta` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `Gromady_id` int(10) UNSIGNED NOT NULL,
+  `Odzywianie_id` int(10) UNSIGNED NOT NULL,
+  `gatunek` text,
+  `wystepowanie` text,
+  `czy_zagrozony` tinyint(1) DEFAULT NULL,
+  `obraz` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `zwierzeta` (`id`, `Gromady_id`, `Odzywianie_id`, `gatunek`, `wystepowanie`, `czy_zagrozony`, `obraz`) VALUES
+(1, 1, 1, 'Sum pospolity', 'Eurazja', 0, 'sum.jpg'),
+(2, 1, 1, 'Jesiotr zachodni', 'Europa', 1, 'jesiotr.jpg'),
+(3, 4, 4, 'Wrona siwa', 'Europa', 0, 'wrona.jpg'),
+(4, 4, 1, 'Puszczyk zwyczajny', 'Eurazja', 0, 'puszczyk.jpg'),
+(5, 4, 4, 'Sroka zwyczajna', 'Eurazja', 0, 'sroka.jpg'),
+(6, 5, 1, 'Wilk szary', 'Europa, Ameryka', 0, 'wilk.jpg'),
+(7, 5, 3, 'Hiena brunatna', 'Afryka', 0, 'hiena.jpg'),
+(8, 5, 2, 'Sarna europejska', 'Europa', 0, 'sarna.jpg'),
+(9, 5, 1, 'Dingo australijski', 'Australia', 1, 'dingo.jpg');
+
+##indeksy i modyfikacje
+ALTER TABLE `dania`
+  ADD PRIMARY KEY (`id`);
+ALTER TABLE `ogloszenie`
+  ADD PRIMARY KEY (`id`);
+ALTER TABLE `wyniki`
+  ADD PRIMARY KEY (`id`);
+ALTER TABLE `zwierzeta`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `dania` 
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+ALTER TABLE `wyniki`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
