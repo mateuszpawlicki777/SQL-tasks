@@ -1,0 +1,65 @@
+
+--nazwisko i stanowisko
+--cross join -> wszystkie wiersze zbioru A ze wszystkimi wierszami zbioru B
+select last_name, job_title
+from jobs, employees;
+
+select last_name, job_title
+from jobs j, employees e
+where e.job_id = j.job_id;
+
+--nazwisko + nazwę departamentu + id departamentu / element wspólny zbiorów
+select e.last_name, e.department_id, d.department_id, department_name
+from departments d, employees e
+where e.department_id = d.department_id(+); 
+
+select *
+from deparments
+where department_name = 'Contracting';
+
+select last_name, job_title
+from employees
+cross join jobs;
+
+select last_name, job_title
+from employees e, jobs j
+where e.job_id = j.job_id;
+
+select last_name, job_title
+from employees e
+join jobs j
+on e.job_id = j.job_id;
+
+select last_name, d.department_id, department_name
+from employees e
+right join departments d
+on e.department_id = d.department_id; 
+
+--wszyscy pracownicy nawet jeżeli nie mają depart.
+select last_name, e.department_id, department_name
+from employees e
+full join departments d
+on e.department_id = d.department_id; 
+
+--last_name, department_name, city 
+--wylacznie więcej niż 8k
+select last_name, department_name, city, grade_level 
+from departments d, employees e, locations loc1, job_grades jg
+where e.department_id = d.department_id and d.location_id = loc1.location_id and salary > 8000
+and e.salary between jg.lowest_sal and highest_sal;
+
+select e.last_name, department_id, department_name
+from employees e
+left join departments d
+--on e.department_id = d.department_id
+using(department_id);--kolumna która nazywa się tak samo, ma ten sam typ danych i jest kluczem
+
+--1. Pokaż nazwiska, stanowiska, pensje, nazwy departamentów.
+select e.last_name, j.job_title, salary, d.department_name
+from employees e, departments d, jobs j
+where e.department_id = d.department_id(+) and j.job_id = e.job_id and salary > 0;
+
+--2. Pokaż nazwiska, stanowiska, pensje, nazwy departamentów sprzedawców (SA na początku stanowiska).
+select e.last_name, j.job_title, salary, d.department_name
+from employees e, departments d, jobs j
+where e.department_id = d.department_id(+) and j.job_id = e.job_id and salary > 0 and j.job_id like 'SA%';
